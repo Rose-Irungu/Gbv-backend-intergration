@@ -1,0 +1,86 @@
+{
+    "sourceFile": "gbv_project/reports/urls.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 17,
+            "patches": [
+                {
+                    "date": 1752559314723,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752559328242,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,6 @@\n+from django.urls import path \r\n+from .views import submit_report\r\n+\r\n+urlpatterns = [\r\n+   path('submit/', submit_report, name='submit_report'),\r\n+]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752582165336,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,16 @@\n-from django.urls import path \r\n-from .views import submit_report\r\n+from django.urls import path\r\n+from . import views\r\n \r\n urlpatterns = [\r\n-   path('submit/', submit_report, name='submit_report'),\r\n-]\n-from django.urls import path \r\n-from .views import submit_report\r\n-urlpatterns = [\r\n-  \r\n+    # Class-based views\r\n+    path('api/reports/', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('api/reports/<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('api/reports/track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+    \r\n+    # Function-based alternatives\r\n+    path('api/reports/create/', views.create_gbv_report, name='gbv-report-create'),\r\n+    path('api/reports/track/<str:reference_code>/', views.track_gbv_report, name='gbv-report-track-func'),\r\n+    \r\n+    # Emergency contacts\r\n+    path('api/emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752583471544,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,14 +3,14 @@\n \r\n urlpatterns = [\r\n     # Class-based views\r\n     path('api/reports/', views.GBVReportView.as_view(), name='gbv-reports'),\r\n-    path('api/reports/<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n-    path('api/reports/track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+   #  path('api/reports/<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+   #  path('api/reports/track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n     \r\n-    # Function-based alternatives\r\n-    path('api/reports/create/', views.create_gbv_report, name='gbv-report-create'),\r\n-    path('api/reports/track/<str:reference_code>/', views.track_gbv_report, name='gbv-report-track-func'),\r\n+   #  # Function-based alternatives\r\n+   #  path('api/reports/create/', views.create_gbv_report, name='gbv-report-create'),\r\n+   #  path('api/reports/track/<str:reference_code>/', views.track_gbv_report, name='gbv-report-track-func'),\r\n     \r\n-    # Emergency contacts\r\n-    path('api/emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+   #  # Emergency contacts\r\n+   #  path('api/emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752583675928,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,14 +3,14 @@\n \r\n urlpatterns = [\r\n     # Class-based views\r\n     path('api/reports/', views.GBVReportView.as_view(), name='gbv-reports'),\r\n-   #  path('api/reports/<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n-   #  path('api/reports/track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+    path('api/reports/<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('api/reports/track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n     \r\n-   #  # Function-based alternatives\r\n-   #  path('api/reports/create/', views.create_gbv_report, name='gbv-report-create'),\r\n-   #  path('api/reports/track/<str:reference_code>/', views.track_gbv_report, name='gbv-report-track-func'),\r\n+    # Function-based alternatives\r\n+    path('api/reports/create/', views.create_gbv_report, name='gbv-report-create'),\r\n+    path('api/reports/track/<str:reference_code>/', views.track_gbv_report, name='gbv-report-track-func'),\r\n     \r\n-   #  # Emergency contacts\r\n-   #  path('api/emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+    # Emergency contacts\r\n+    path('api/emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752583723171,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,15 +2,11 @@\n from . import views\r\n \r\n urlpatterns = [\r\n     # Class-based views\r\n-    path('api/reports/', views.GBVReportView.as_view(), name='gbv-reports'),\r\n-    path('api/reports/<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n-    path('api/reports/track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n-    \r\n-    # Function-based alternatives\r\n-    path('api/reports/create/', views.create_gbv_report, name='gbv-report-create'),\r\n-    path('api/reports/track/<str:reference_code>/', views.track_gbv_report, name='gbv-report-track-func'),\r\n-    \r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n\\ No newline at end of file\n+\r\n     # Emergency contacts\r\n-    path('api/emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n-]\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645195280,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n from django.urls import path\r\n+from res\r\n from . import views\r\n \r\n urlpatterns = [\r\n     # Class-based views\r\n@@ -8,5 +9,5 @@\n     path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n \r\n     # Emergency contacts\r\n     path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n-]\n\\ No newline at end of file\n+]\r\n"
+                },
+                {
+                    "date": 1752645204810,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,13 @@\n+from django.urls import path\r\n+from rest_framework.routers import D\r\n+from . import views\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645214562,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,13 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645221143,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,15 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645226353,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,15 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+router = \r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645232836,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,16 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+router = DefaultRouter()\r\n+\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645246244,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,16 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+router = DefaultRouter()\r\n+router.register\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645251411,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,16 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+router = DefaultRouter()\r\n+router.register(\"\")\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645257414,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,16 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+router = DefaultRouter()\r\n+router.register('report')\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645262703,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,16 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+router = DefaultRouter()\r\n+router.register('report', )\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                },
+                {
+                    "date": 1752645268019,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n from rest_framework.routers import DefaultRouter\r\n from . import views\r\n \r\n router = DefaultRouter()\r\n-router.register('report', vies)\r\n+router.register('report', views.)\r\n \r\n urlpatterns = [\r\n     # Class-based views\r\n     path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n"
+                },
+                {
+                    "date": 1752645285310,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,16 @@\n+from django.urls import path, include\r\n+from rest_framework.routers import DefaultRouter\r\n+from . import views\r\n+\r\n+router = DefaultRouter()\r\n+router.register('report', views.Re)\r\n+\r\n+urlpatterns = [\r\n+    # Class-based views\r\n+    path('', views.GBVReportView.as_view(), name='gbv-reports'),\r\n+    path('<int:report_id>/', views.GBVReportDetailView.as_view(), name='gbv-report-detail'),\r\n+    path('track/<str:reference_code>/', views.GBVReportTrackingView.as_view(), name='gbv-report-track'),\r\n+\r\n+    # Emergency contacts\r\n+    path('emergency-contacts/', views.emergency_contacts, name='emergency-contacts'),\r\n+]\r\n"
+                }
+            ],
+            "date": 1752559314723,
+            "name": "Commit-0",
+            "content": "from django.urls import path \r\nfrom .views import submit_report\r\nurlpatterns = [\r\n  \r\n]"
+        }
+    ]
+}

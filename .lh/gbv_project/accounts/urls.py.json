@@ -1,0 +1,50 @@
+{
+    "sourceFile": "gbv_project/accounts/urls.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1752651025884,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752651031814,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,6 @@\n+from django.urls import path \r\n+from \r\n+\r\n+urlpatterns = [\r\n+  path(\"api/auth/\", AuthView.as_view(), name=\"auth\"),\r\n+]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752651037604,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,6 @@\n from django.urls import path \r\n-from \r\n+from accounts.views\r\n \r\n urlpatterns = [\r\n   path(\"api/auth/\", AuthView.as_view(), name=\"auth\"),\r\n-]\n-from django.urls import path \r\n-\r\n-urlpatterns = [\r\n-  path(\"api/auth/\", AuthView.as_view(), name=\"auth\"),\r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752651045046,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n from django.urls import path \r\n-from accounts.views\r\n+from accounts.views import APIView\r\n \r\n urlpatterns = [\r\n   path(\"api/auth/\", AuthView.as_view(), name=\"auth\"),\r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752651051315,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n from django.urls import path \r\n-from accounts.views import APIView\r\n+from accounts.views import A\r\n \r\n urlpatterns = [\r\n   path(\"api/auth/\", AuthView.as_view(), name=\"auth\"),\r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752651160565,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n from django.urls import path \r\n-from accounts.views import A\r\n+from accounts.views import AuthView\r\n \r\n urlpatterns = [\r\n-  path(\"api/auth/\", AuthView.as_view(), name=\"auth\"),\r\n+  path(\"\", AuthView.as_view(), name=\"auth\"),\r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752742067648,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,5 +2,6 @@\n from accounts.views import AuthView\r\n \r\n urlpatterns = [\r\n   path(\"\", AuthView.as_view(), name=\"auth\"),\r\n+  \r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752742075091,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n from django.urls import path \r\n from accounts.views import AuthView\r\n \r\n urlpatterns = [\r\n-  path(\"\", AuthView.as_view(), name=\"auth\"),path('signup/', UserSignupView.as_view(), name='signup'),\r\n+  path(\"\", AuthView.as_view(), name=\"auth\"),\r\n   \r\n   \r\n+  \r\n ]\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752742150514,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,10 @@\n+from django.urls import path \r\n+from accounts.views import AuthView\r\n+\r\n+\r\n+urlpatterns = [\r\n+  path(\"\", AuthView.as_view(), name=\"auth\"),\r\n+  path('signup/', UserSignupView.as_view(), name='signup'),\r\n+  \r\n+  \r\n+]\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1752651025884,
+            "name": "Commit-0",
+            "content": "from django.urls import path \r\n\r\nurlpatterns = [\r\n  path(\"api/auth/\", AuthView.as_view(), name=\"auth\"),\r\n]"
+        }
+    ]
+}

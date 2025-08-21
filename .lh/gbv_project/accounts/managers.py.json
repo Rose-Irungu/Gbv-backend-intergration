@@ -1,0 +1,22 @@
+{
+    "sourceFile": "gbv_project/accounts/managers.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1753271189483,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1753271198400,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager\r\n+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager\r\n from django.db import models\r\n \r\n class UserManager(BaseUserManager):\r\n     def create_user(self, email, password=None, **extra_fields):\r\n"
+                }
+            ],
+            "date": 1753271189483,
+            "name": "Commit-0",
+            "content": "from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager\r\nfrom django.db import models\r\n\r\nclass UserManager(BaseUserManager):\r\n    def create_user(self, email, password=None, **extra_fields):\r\n        if not email:\r\n            raise ValueError('Users must have an email address')\r\n        email = self.normalize_email(email)\r\n        user = self.model(email=email, **extra_fields)\r\n        user.set_password(password)\r\n        user.save(using=self._db)\r\n        return user\r\n\r\n    def create_superuser(self, email, password=None, **extra_fields):\r\n        extra_fields.setdefault('is_staff', True)\r\n        extra_fields.setdefault('is_superuser', True)\r\n        return self.create_user(email, password, **extra_fields)"
+        }
+    ]
+}

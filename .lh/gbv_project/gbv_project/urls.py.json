@@ -1,0 +1,90 @@
+{
+    "sourceFile": "gbv_project/gbv_project/urls.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 18,
+            "patches": [
+                {
+                    "date": 1752559372478,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752582237174,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,10 +7,10 @@\n urlpatterns = [\r\n     path('admin/', admin.site.urls),\r\n     path('api/accounts/', include('accounts.urls')),\r\n     path('api/reports/', include('reports.urls')),\r\n-    path('api/cases/', include('cases.urls')),\r\n     \r\n+    path('api/report/', include('reports.urls')),\r\n     \r\n     # API Documentation\r\n     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n"
+                },
+                {
+                    "date": 1752582248516,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n     path('admin/', admin.site.urls),\r\n     path('api/accounts/', include('accounts.urls')),\r\n     path('api/reports/', include('reports.urls')),\r\n     \r\n-    path('api/report/', include('reports.urls')),\r\n+  \r\n     \r\n     # API Documentation\r\n     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n"
+                },
+                {
+                    "date": 1752583557452,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,20 +1,16 @@\n from django.contrib import admin\r\n from django.urls import path, include\r\n from django.conf import settings\r\n from django.conf.urls.static import static\r\n-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n \r\n urlpatterns = [\r\n-    path('admin/', admin.site.urls),\r\n+    path('admin/', admin.site.urls),  # MUST be before any catch-all\r\n     path('api/accounts/', include('accounts.urls')),\r\n     path('api/reports/', include('reports.urls')),\r\n-    \r\n-  \r\n-    \r\n-    # API Documentation\r\n-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n+    path('api/schema/', get_schema_view(), name='schema'),\r\n+    path('api/docs/', TemplateView.as_view(template_name='docs.html'), name='swagger-ui'),\r\n ]\r\n\\ No newline at end of file\n \r\n+# Only add this in development\r\n if settings.DEBUG:\r\n-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\r\n"
+                },
+                {
+                    "date": 1752583571145,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,11 +6,11 @@\n urlpatterns = [\r\n     path('admin/', admin.site.urls),  # MUST be before any catch-all\r\n     path('api/accounts/', include('accounts.urls')),\r\n     path('api/reports/', include('reports.urls')),\r\n-    path('api/schema/', get_schema_view(), name='schema'),\r\n-    path('api/docs/', TemplateView.as_view(template_name='docs.html'), name='swagger-ui'),\r\n+    # path('api/schema/', get_schema_view(), name='schema'),\r\n+    # path('api/docs/', TemplateView.as_view(template_name='docs.html'), name='swagger-ui'),\r\n ]\r\n \r\n # Only add this in development\r\n\\ No newline at end of file\n if settings.DEBUG:\r\n-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\r\n"
+                },
+                {
+                    "date": 1752583603246,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,20 @@\n from django.contrib import admin\r\n from django.urls import path, include\r\n from django.conf import settings\r\n from django.conf.urls.static import static\r\n+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n \r\n urlpatterns = [\r\n-    path('admin/', admin.site.urls),  # MUST be before any catch-all\r\n+    path('admin/', admin.site.urls),\r\n     path('api/accounts/', include('accounts.urls')),\r\n     path('api/reports/', include('reports.urls')),\r\n-    # path('api/schema/', get_schema_view(), name='schema'),\r\n-    # path('api/docs/', TemplateView.as_view(template_name='docs.html'), name='swagger-ui'),\r\n+    \r\n+  \r\n+    \r\n+    # API Documentation\r\n+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n ]\r\n \r\n-# Only add this in development\r\n if settings.DEBUG:\r\n     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752645415849,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n \r\n urlpatterns = [\r\n     path('admin/', admin.site.urls),\r\n     path('api/accounts/', include('accounts.urls')),\r\n-    path('api/reports/', include('reports.urls')),\r\n+    path('api', include('reports.urls')),\r\n     \r\n   \r\n     \r\n     # API Documentation\r\n"
+                },
+                {
+                    "date": 1752646136590,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,14 +6,14 @@\n \r\n urlpatterns = [\r\n     path('admin/', admin.site.urls),\r\n     path('api/accounts/', include('accounts.urls')),\r\n-    path('api', include('reports.urls')),\r\n+    path('api/', include('reports.urls')),\r\n     \r\n   \r\n     \r\n     # API Documentation\r\n-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('api/schema', SpectacularAPIView.as_view(), name='schema'),\r\n     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n ]\r\n \r\n if settings.DEBUG:\r\n"
+                },
+                {
+                    "date": 1752646142264,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n     \r\n   \r\n     \r\n     # API Documentation\r\n-    path('api/schema', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n ]\r\n \r\n if settings.DEBUG:\r\n"
+                },
+                {
+                    "date": 1752646199925,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n   \r\n     \r\n     # API Documentation\r\n     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n+    path('', SpectacularSwaggerView.as_view(), name='swagger-ui'),\r\n ]\r\n \r\n if settings.DEBUG:\r\n     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752646215437,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n     \r\n   \r\n     \r\n     # API Documentation\r\n-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n     path('', SpectacularSwaggerView.as_view(), name='swagger-ui'),\r\n ]\r\n \r\n if settings.DEBUG:\r\n"
+                },
+                {
+                    "date": 1752646315281,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n     \r\n   \r\n     \r\n     # API Documentation\r\n-    # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n     path('', SpectacularSwaggerView.as_view(), name='swagger-ui'),\r\n ]\r\n \r\n if settings.DEBUG:\r\n"
+                },
+                {
+                    "date": 1752646347282,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,20 @@\n+from django.contrib import admin\r\n+from django.urls import path, include\r\n+from django.conf import settings\r\n+from django.conf.urls.static import static\r\n+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n+\r\n+urlpatterns = [\r\n+    path('admin/', admin.site.urls),\r\n+    path('api/accounts/', include('accounts.urls')),\r\n+    path('api/', include('reports.urls')),\r\n+    \r\n+  \r\n+    \r\n+    # API Documentation\r\n+    # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n+]\r\n+\r\n+if settings.DEBUG:\r\n+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752646806812,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,30 +11,10 @@\n     \r\n   \r\n     \r\n     # API Documentation\r\n-    # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n     path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n ]\r\n \r\n if settings.DEBUG:\r\n-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n-from django.contrib import admin\r\n-from django.urls import path, include\r\n-from django.conf import settings\r\n-from django.conf.urls.static import static\r\n-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n-\r\n-urlpatterns = [\r\n-    path('admin/', admin.site.urls),\r\n-    path('api/accounts/', include('accounts.urls')),\r\n-    path('api/', include('reports.urls')),\r\n-    \r\n-  \r\n-    \r\n-    # API Documentation\r\n-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n-    path('', SpectacularSwaggerView.as_view(), name='swagger-ui'),\r\n-]\r\n-\r\n-if settings.DEBUG:\r\n     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752651143213,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n \r\n urlpatterns = [\r\n     path('admin/', admin.site.urls),\r\n-    path('api/accounts/', include('accounts.urls')),\r\n+    path('', include('accounts.urls')),\r\n     path('api/', include('reports.urls')),\r\n     \r\n   \r\n     \r\n"
+                },
+                {
+                    "date": 1752651148559,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n \r\n urlpatterns = [\r\n     path('admin/', admin.site.urls),\r\n-    path('', include('accounts.urls')),\r\n+    path('api', include('accounts.urls')),\r\n     path('api/', include('reports.urls')),\r\n     \r\n   \r\n     \r\n"
+                },
+                {
+                    "date": 1752651153849,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,20 @@\n+from django.contrib import admin\r\n+from django.urls import path, include\r\n+from django.conf import settings\r\n+from django.conf.urls.static import static\r\n+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n+\r\n+urlpatterns = [\r\n+    path('admin/', admin.site.urls),\r\n+    path('api/auth/', include('accounts.urls')),\r\n+    path('api/', include('reports.urls')),\r\n+    \r\n+  \r\n+    \r\n+    # API Documentation\r\n+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n+]\r\n+\r\n+if settings.DEBUG:\r\n+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752838884738,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n \r\n urlpatterns = [\r\n     path('admin/', admin.site.urls),\r\n     path('api/auth/', include('accounts.urls')),\r\n-    path('api/', include('reports.urls')),\r\n+    path('api/reports', include('reports.urls')),\r\n     \r\n   \r\n     \r\n     # API Documentation\r\n@@ -16,25 +16,5 @@\n     path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n ]\r\n \r\n if settings.DEBUG:\r\n-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n-from django.contrib import admin\r\n-from django.urls import path, include\r\n-from django.conf import settings\r\n-from django.conf.urls.static import static\r\n-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n-\r\n-urlpatterns = [\r\n-    path('admin/', admin.site.urls),\r\n-    path('api', include('accounts.urls')),\r\n-    path('api/', include('reports.urls')),\r\n-    \r\n-  \r\n-    \r\n-    # API Documentation\r\n-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n-    path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n-]\r\n-\r\n-if settings.DEBUG:\r\n     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752838922815,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,20 @@\n+from django.contrib import admin\r\n+from django.urls import path, include\r\n+from django.conf import settings\r\n+from django.conf.urls.static import static\r\n+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n+\r\n+urlpatterns = [\r\n+    path('admin/', admin.site.urls),\r\n+    path('api/auth/', include('accounts.urls')),\r\n+    path('api/', include('reports.urls')),\r\n+    \r\n+  \r\n+    \r\n+    # API Documentation\r\n+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n+    path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n+]\r\n+\r\n+if settings.DEBUG:\r\n+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1752559372478,
+            "name": "Commit-0",
+            "content": "from django.contrib import admin\r\nfrom django.urls import path, include\r\nfrom django.conf import settings\r\nfrom django.conf.urls.static import static\r\nfrom drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView\r\n\r\nurlpatterns = [\r\n    path('admin/', admin.site.urls),\r\n    path('api/accounts/', include('accounts.urls')),\r\n    path('api/reports/', include('reports.urls')),\r\n    path('api/cases/', include('cases.urls')),\r\n    \r\n    \r\n    # API Documentation\r\n    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),\r\n    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),\r\n]\r\n\r\nif settings.DEBUG:\r\n    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)"
+        }
+    ]
+}

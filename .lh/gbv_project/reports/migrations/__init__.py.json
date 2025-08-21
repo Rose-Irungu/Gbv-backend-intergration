@@ -1,0 +1,18 @@
+{
+    "sourceFile": "gbv_project/reports/migrations/__init__.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1752571088548,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1752571088548,
+            "name": "Commit-0",
+            "content": "dependencies = [\r\n    ('reports', '0001_initial'),\r\n]"
+        }
+    ]
+}

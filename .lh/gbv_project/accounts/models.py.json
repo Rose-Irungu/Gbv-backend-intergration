@@ -1,0 +1,66 @@
+{
+    "sourceFile": "gbv_project/accounts/models.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 12,
+            "patches": [
+                {
+                    "date": 1752649400328,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752649418251,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,4 @@\n-from django.db import models\r\n-\r\n from django.contrib.auth.models import AbstractUser\r\n from django.db import models\r\n import uuid\r\n \r\n@@ -11,9 +9,8 @@\n         ('doctor', 'Doctor'),\r\n         ('lawyer', 'Lawyer'),\r\n         ('counselor', 'Counselor'),\r\n     ]\r\n-    \r\n     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)\r\n     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)\r\n     phone_number = models.CharField(max_length=15, blank=True)\r\n     is_verified = models.BooleanField(default=False)\r\n"
+                },
+                {
+                    "date": 1752741888453,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,41 +1,12 @@\n+# accounts/models.py\r\n from django.contrib.auth.models import AbstractUser\r\n from django.db import models\r\n-import uuid\r\n \r\n class User(AbstractUser):\r\n-    USER_TYPE_CHOICES = [\r\n-        ('survivor', 'Survivor'),\r\n+    ROLE_CHOICES = [\r\n         ('admin', 'Admin'),\r\n         ('doctor', 'Doctor'),\r\n+        ('counselor', 'Counselor'),\r\n         ('lawyer', 'Lawyer'),\r\n-        ('counselor', 'Counselor'),\r\n     ]\r\n-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)\r\n-    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)\r\n-    phone_number = models.CharField(max_length=15, blank=True)\r\n-    is_verified = models.BooleanField(default=False)\r\n-    created_at = models.DateTimeField(auto_now_add=True)\r\n-    updated_at = models.DateTimeField(auto_now=True)\r\n-    \r\n-    # Additional fields for specialists\r\n-    license_number = models.CharField(max_length=50, blank=True)\r\n-    specialization = models.CharField(max_length=100, blank=True)\r\n-    organization = models.CharField(max_length=200, blank=True)\r\n-    \r\n-    def __str__(self):\r\n-        return f\"{self.username} - {self.get_user_type_display()}\"\r\n-\r\n-class CommunicationPreference(models.Model):\r\n-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='communication_pref')\r\n-    safe_times = models.JSONField(default=dict)  # {\"monday\": [\"09:00-12:00\"], ...}\r\n-    preferred_method = models.CharField(max_length=20, choices=[\r\n-        ('call', 'Phone Call'),\r\n-        ('sms', 'SMS'),\r\n-        ('email', 'Email'),\r\n-        ('in_person', 'In Person'),\r\n-    ])\r\n-    safe_word = models.CharField(max_length=50, blank=True)\r\n-    emergency_contact = models.CharField(max_length=100, blank=True)\r\n\\ No newline at end of file\n-    \r\n-    def __str__(self):\r\n-        return f\"Communication preferences for {self.user.username}\"\n+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)\r\n"
+                },
+                {
+                    "date": 1752817101400,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,5 +8,5 @@\n         ('doctor', 'Doctor'),\r\n         ('counselor', 'Counselor'),\r\n         ('lawyer', 'Lawyer'),\r\n     ]\r\n-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)\r\n+    role = models.CharField(max_length=20, choices=ROLE_CHOI)\r\n"
+                },
+                {
+                    "date": 1752817107989,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,12 @@\n+# accounts/models.py\r\n+from django.contrib.auth.models import AbstractUser\r\n+from django.db import models\r\n+\r\n+class User(AbstractUser):\r\n+    ROLE_CHOICES = [\r\n+        ('admin', 'Admin'),\r\n+        ('doctor', 'Doctor'),\r\n+        ('counselor', 'Counselor'),\r\n+        ('lawyer', 'Lawyer'),\r\n+    ]\r\n+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, )\r\n"
+                },
+                {
+                    "date": 1752817117036,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,12 @@\n+# accounts/models.py\r\n+from django.contrib.auth.models import AbstractUser\r\n+from django.db import models\r\n+\r\n+class User(AbstractUser):\r\n+    ROLE_CHOICES = [\r\n+        ('admin', 'Admin'),\r\n+        ('doctor', 'Doctor'),\r\n+        ('counselor', 'Counselor'),\r\n+        ('lawyer', 'Lawyer'),\r\n+    ]\r\n+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default)\r\n"
+                },
+                {
+                    "date": 1752817127356,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,12 @@\n+# accounts/models.py\r\n+from django.contrib.auth.models import AbstractUser\r\n+from django.db import models\r\n+\r\n+class User(AbstractUser):\r\n+    ROLE_CHOICES = [\r\n+        ('admin', 'Admin'),\r\n+        ('doctor', 'Doctor'),\r\n+        ('counselor', 'Counselor'),\r\n+        ('lawyer', 'Lawyer'),\r\n+    ]\r\n+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='')\r\n"
+                },
+                {
+                    "date": 1752817977139,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,46 +3,11 @@\n from django.db import models\r\n \r\n class User(AbstractUser):\r\n     ROLE_CHOICES = [\r\n+        \r\n         ('admin', 'Admin'),\r\n         ('doctor', 'Doctor'),\r\n         ('counselor', 'Counselor'),\r\n         ('lawyer', 'Lawyer'),\r\n     ]\r\n-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='')\r\n-# accounts/models.py\r\n-from django.contrib.auth.models import AbstractUser\r\n-from django.db import models\r\n-\r\n-class User(AbstractUser):\r\n-    ROLE_CHOICES = [\r\n-        ('admin', 'Admin'),\r\n-        ('doctor', 'Doctor'),\r\n-        ('counselor', 'Counselor'),\r\n-        ('lawyer', 'Lawyer'),\r\n-    ]\r\n-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default)\r\n-# accounts/models.py\r\n-from django.contrib.auth.models import AbstractUser\r\n-from django.db import models\r\n-\r\n-class User(AbstractUser):\r\n-    ROLE_CHOICES = [\r\n-        ('admin', 'Admin'),\r\n-        ('doctor', 'Doctor'),\r\n-        ('counselor', 'Counselor'),\r\n-        ('lawyer', 'Lawyer'),\r\n-    ]\r\n-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, )\r\n-# accounts/models.py\r\n-from django.contrib.auth.models import AbstractUser\r\n-from django.db import models\r\n-\r\n-class User(AbstractUser):\r\n-    ROLE_CHOICES = [\r\n-        ('admin', 'Admin'),\r\n-        ('doctor', 'Doctor'),\r\n-        ('counselor', 'Counselor'),\r\n-        ('lawyer', 'Lawyer'),\r\n-    ]\r\n-    role = models.CharField(max_length=20, choices=ROLE_CHOI)\r\n+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='admin')\r\n"
+                },
+                {
+                    "date": 1752818021151,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n from django.db import models\r\n \r\n class User(AbstractUser):\r\n     ROLE_CHOICES = [\r\n-        \r\n+        ()\r\n         ('admin', 'Admin'),\r\n         ('doctor', 'Doctor'),\r\n         ('counselor', 'Counselor'),\r\n         ('lawyer', 'Lawyer'),\r\n"
+                },
+                {
+                    "date": 1752818026528,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n from django.db import models\r\n \r\n class User(AbstractUser):\r\n     ROLE_CHOICES = [\r\n-        ()\r\n+        ('')\r\n         ('admin', 'Admin'),\r\n         ('doctor', 'Doctor'),\r\n         ('counselor', 'Counselor'),\r\n         ('lawyer', 'Lawyer'),\r\n"
+                },
+                {
+                    "date": 1752818031810,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n from django.db import models\r\n \r\n class User(AbstractUser):\r\n     ROLE_CHOICES = [\r\n-        ('')\r\n+        ('sur')\r\n         ('admin', 'Admin'),\r\n         ('doctor', 'Doctor'),\r\n         ('counselor', 'Counselor'),\r\n         ('lawyer', 'Lawyer'),\r\n"
+                },
+                {
+                    "date": 1752818038063,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n from django.db import models\r\n \r\n class User(AbstractUser):\r\n     ROLE_CHOICES = [\r\n-        ('survivor',)\r\n+        ('survivor', )\r\n         ('admin', 'Admin'),\r\n         ('doctor', 'Doctor'),\r\n         ('counselor', 'Counselor'),\r\n         ('lawyer', 'Lawyer'),\r\n"
+                },
+                {
+                    "date": 1752818045708,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,13 @@\n+# accounts/models.py\r\n+from django.contrib.auth.models import AbstractUser\r\n+from django.db import models\r\n+\r\n+class User(AbstractUser):\r\n+    ROLE_CHOICES = [\r\n+        ('survivor', ss)\r\n+        ('admin', 'Admin'),\r\n+        ('doctor', 'Doctor'),\r\n+        ('counselor', 'Counselor'),\r\n+        ('lawyer', 'Lawyer'),\r\n+    ]\r\n+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='admin')\r\n"
+                }
+            ],
+            "date": 1752649400328,
+            "name": "Commit-0",
+            "content": "from django.db import models\r\n\r\nfrom django.contrib.auth.models import AbstractUser\r\nfrom django.db import models\r\nimport uuid\r\n\r\nclass User(AbstractUser):\r\n    USER_TYPE_CHOICES = [\r\n        ('survivor', 'Survivor'),\r\n        ('admin', 'Admin'),\r\n        ('doctor', 'Doctor'),\r\n        ('lawyer', 'Lawyer'),\r\n        ('counselor', 'Counselor'),\r\n    ]\r\n    \r\n    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)\r\n    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)\r\n    phone_number = models.CharField(max_length=15, blank=True)\r\n    is_verified = models.BooleanField(default=False)\r\n    created_at = models.DateTimeField(auto_now_add=True)\r\n    updated_at = models.DateTimeField(auto_now=True)\r\n    \r\n    # Additional fields for specialists\r\n    license_number = models.CharField(max_length=50, blank=True)\r\n    specialization = models.CharField(max_length=100, blank=True)\r\n    organization = models.CharField(max_length=200, blank=True)\r\n    \r\n    def __str__(self):\r\n        return f\"{self.username} - {self.get_user_type_display()}\"\r\n\r\nclass CommunicationPreference(models.Model):\r\n    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='communication_pref')\r\n    safe_times = models.JSONField(default=dict)  # {\"monday\": [\"09:00-12:00\"], ...}\r\n    preferred_method = models.CharField(max_length=20, choices=[\r\n        ('call', 'Phone Call'),\r\n        ('sms', 'SMS'),\r\n        ('email', 'Email'),\r\n        ('in_person', 'In Person'),\r\n    ])\r\n    safe_word = models.CharField(max_length=50, blank=True)\r\n    emergency_contact = models.CharField(max_length=100, blank=True)\r\n    \r\n    def __str__(self):\r\n        return f\"Communication preferences for {self.user.username}\""
+        }
+    ]
+}

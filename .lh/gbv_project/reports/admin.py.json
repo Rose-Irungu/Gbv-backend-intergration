@@ -1,0 +1,38 @@
+{
+    "sourceFile": "gbv_project/reports/admin.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1752497253244,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752559114454,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,6 +32,6 @@\n         })\r\n     )\r\n     \r\n     def has_add_permission(self, request):\r\n-        # Prevent manual creation of reports through admin\r\n+        \r\n         return False\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752570787828,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,6 +32,6 @@\n         })\r\n     )\r\n     \r\n     def has_add_permission(self, request):\r\n-        \r\n+        # Prevent manual creation of reports through admin\r\n         return False\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752570818728,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,37 +1,3 @@\n from django.contrib import admin\r\n \r\n # Register your models here.\r\n-from django.contrib import admin\r\n-from .models import AnonymousReport, ReportDocument\r\n-\r\n-@admin.register(AnonymousReport)\r\n-class AnonymousReportAdmin(admin.ModelAdmin):\r\n-    list_display = ['reference_code', 'incident_type', 'status', 'immediate_danger', 'created_at']\r\n-    list_filter = ['status', 'incident_type', 'immediate_danger', 'needs_medical_attention']\r\n-    search_fields = ['reference_code', 'incident_location']\r\n-    readonly_fields = ['reference_code', 'created_at', 'updated_at']\r\n-    \r\n-    fieldsets = (\r\n-        ('Report Information', {\r\n-            'fields': ('reference_code', 'status', 'incident_type', 'incident_date', 'incident_location')\r\n-        }),\r\n-        ('Incident Details', {\r\n-            'fields': ('description',)\r\n-        }),\r\n-        ('Safety Assessment', {\r\n-            'fields': ('immediate_danger', 'needs_medical_attention')\r\n-        }),\r\n-        ('Contact Information', {\r\n-            'fields': ('contact_method', 'contact_info')\r\n-        }),\r\n-        ('Review Information', {\r\n-            'fields': ('reviewed_by', 'reviewed_at')\r\n-        }),\r\n-        ('Timestamps', {\r\n-            'fields': ('created_at', 'updated_at')\r\n-        })\r\n-    )\r\n-    \r\n-    def has_add_permission(self, request):\r\n-        # Prevent manual creation of reports through admin\r\n-        return False\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752570830549,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,15 @@\n+from django.contrib import admin\r\n+\r\n+# Register your models here.\r\n+from django.db import models\r\n+\r\n+class AnonymousReport(models.Model):\r\n+    description = models.TextField()\r\n+    location = models.CharField(max_length=255)\r\n+    date_reported = models.DateTimeField(auto_now_add=True)\r\n+\r\n+    def __str__(self):\r\n+        return f\"Anonymous Report from {self.location}\"\r\n+class ReportDocument(models.Model):\r\n+    report = models.ForeignKey(AnonymousReport, on_delete=models.CASCADE)\r\n+    file = models.FileField(upload_to='report_documents/')\r\n"
+                },
+                {
+                    "date": 1752582587103,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,18 +1,38 @@\n from django.contrib import admin\r\n+from .models import GBVReport\r\n \r\n-# Register your models here.\r\n-from django.db import models\r\n-\r\n-class AnonymousReport(models.Model):\r\n-    description = models.TextField()\r\n-    location = models.CharField(max_length=255)\r\n-    date_reported = models.DateTimeField(auto_now_add=True)\r\n-\r\n-    def __str__(self):\r\n-        return f\"Anonymous Report from {self.location}\"\r\n-class ReportDocument(models.Model):\r\n-    report = models.ForeignKey(AnonymousReport, on_delete=models.CASCADE)\r\n-    file = models.FileField(upload_to='report_documents/')\r\n-from django.contrib import admin\r\n-\r\n-# Register your models here.\r\n+@admin.register(GBVReport)\r\n+class GBVReportAdmin(admin.ModelAdmin):\r\n+    list_display = [\r\n+        'reference_code', \r\n+        'name', \r\n+        'incident_type', \r\n+        'incident_location', \r\n+        'immediate_danger',\r\n+        'needs_medical_attention',\r\n+        'date_reported'\r\n+    ]\r\n+    list_filter = [\r\n+        'incident_type', \r\n+        'immediate_danger', \r\n+        'needs_medical_attention',\r\n+        'date_reported'\r\n+    ]\r\n+    search_fields = ['reference_code', 'name', 'email', 'incident_location']\r\n+    readonly_fields = ['reference_code', 'date_reported']\r\n+    \r\n+    fieldsets = (\r\n+        ('Personal Information', {\r\n+            'fields': ('name', 'email', 'phone')\r\n+        }),\r\n+        ('Incident Details', {\r\n+            'fields': ('incident_date', 'incident_location', 'incident_type', 'description')\r\n+        }),\r\n+        ('Safety Assessment', {\r\n+            'fields': ('immediate_danger', 'needs_medical_attention')\r\n+        }),\r\n+        ('System Information', {\r\n+            'fields': ('reference_code', 'date_reported'),\r\n+            'classes': ('collapse',)\r\n+        })\r\n+    )\r\n"
+                }
+            ],
+            "date": 1752497253244,
+            "name": "Commit-0",
+            "content": "from django.contrib import admin\r\n\r\n# Register your models here.\r\nfrom django.contrib import admin\r\nfrom .models import AnonymousReport, ReportDocument\r\n\r\n@admin.register(AnonymousReport)\r\nclass AnonymousReportAdmin(admin.ModelAdmin):\r\n    list_display = ['reference_code', 'incident_type', 'status', 'immediate_danger', 'created_at']\r\n    list_filter = ['status', 'incident_type', 'immediate_danger', 'needs_medical_attention']\r\n    search_fields = ['reference_code', 'incident_location']\r\n    readonly_fields = ['reference_code', 'created_at', 'updated_at']\r\n    \r\n    fieldsets = (\r\n        ('Report Information', {\r\n            'fields': ('reference_code', 'status', 'incident_type', 'incident_date', 'incident_location')\r\n        }),\r\n        ('Incident Details', {\r\n            'fields': ('description',)\r\n        }),\r\n        ('Safety Assessment', {\r\n            'fields': ('immediate_danger', 'needs_medical_attention')\r\n        }),\r\n        ('Contact Information', {\r\n            'fields': ('contact_method', 'contact_info')\r\n        }),\r\n        ('Review Information', {\r\n            'fields': ('reviewed_by', 'reviewed_at')\r\n        }),\r\n        ('Timestamps', {\r\n            'fields': ('created_at', 'updated_at')\r\n        })\r\n    )\r\n    \r\n    def has_add_permission(self, request):\r\n        # Prevent manual creation of reports through admin\r\n        return False"
+        }
+    ]
+}

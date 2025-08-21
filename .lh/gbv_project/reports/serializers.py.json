@@ -1,0 +1,38 @@
+{
+    "sourceFile": "gbv_project/reports/serializers.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1752559251653,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752649842499,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,57 @@\n from rest_framework import serializers\r\n+from django.contrib.auth import get_user_model\r\n+from django.core.mail import send_mail\r\n from .models import GBVReport\r\n+import string\r\n+import random\r\n \r\n+User = get_user_model()\r\n+\r\n class GBVReportSerializer(serializers.ModelSerializer):\r\n     class Meta:\r\n         model = GBVReport\r\n         fields = '__all__'\r\n+\r\n+    def create(self, validated_data):\r\n+        # Create GBV Report\r\n+        report = GBVReport.objects.create(**validated_data)\r\n+\r\n+        # Check if user already exists\r\n+        email = validated_data.get('email')\r\n+        if not User.objects.filter(email=email).exists():\r\n+            # Generate random password\r\n+            password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))\r\n+\r\n+            # Create user\r\n+            user = User.objects.create_user(\r\n+                username=email,\r\n+                email=email,\r\n+                password=password,\r\n+                user_type='survivor',\r\n+                phone_number=validated_data.get('phone', ''),\r\n+                first_name=validated_data.get('name', '')\r\n+            )\r\n+\r\n+            # Send credentials via email\r\n+            send_mail(\r\n+                subject=\"Your Account Has Been Created\",\r\n+                message=f\"\"\"\r\n+Hello {user.first_name},\r\n+\r\n+Your report has been received. An account has been created for you.\r\n+\r\n+Login Details:\r\n+Email: {user.email}\r\n+Password: {password}\r\n+\r\n+Please log in and update your password after your first login.\r\n+\r\n+Regards,\r\n+Support Team\r\n+                \"\"\",\r\n+                from_email=\"noreply@gbv-platform.org\",\r\n+                recipient_list=[user.email],\r\n+                fail_silently=False\r\n+            )\r\n+\r\n+        return report\r\n"
+                },
+                {
+                    "date": 1752650286681,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -48,9 +48,9 @@\n \r\n Regards,\r\n Support Team\r\n                 \"\"\",\r\n-                from_email=\"noreply@gbv-platform.org\",\r\n+                from_email=\"roseirungu497@gmail.com\",\r\n                 recipient_list=[user.email],\r\n                 fail_silently=False\r\n             )\r\n \r\n"
+                },
+                {
+                    "date": 1752818002127,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n             user = User.objects.create_user(\r\n                 username=email,\r\n                 email=email,\r\n                 password=password,\r\n-                user_type='survivor',\r\n+                u='survivor',\r\n                 phone_number=validated_data.get('phone', ''),\r\n                 first_name=validated_data.get('name', '')\r\n             )\r\n \r\n"
+                },
+                {
+                    "date": 1752818009796,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n             user = User.objects.create_user(\r\n                 username=email,\r\n                 email=email,\r\n                 password=password,\r\n-                u='survivor',\r\n+                role='survivor',\r\n                 phone_number=validated_data.get('phone', ''),\r\n                 first_name=validated_data.get('name', '')\r\n             )\r\n \r\n"
+                },
+                {
+                    "date": 1753337449657,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,9 +23,9 @@\n             password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))\r\n \r\n             # Create user\r\n             user = User.objects.create_user(\r\n-                username=email,\r\n+                # username=email,\r\n                 email=email,\r\n                 password=password,\r\n                 role='survivor',\r\n                 phone_number=validated_data.get('phone', ''),\r\n"
+                }
+            ],
+            "date": 1752559251653,
+            "name": "Commit-0",
+            "content": "from rest_framework import serializers\r\nfrom .models import GBVReport\r\n\r\nclass GBVReportSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = GBVReport\r\n        fields = '__all__'\r\n"
+        }
+    ]
+}

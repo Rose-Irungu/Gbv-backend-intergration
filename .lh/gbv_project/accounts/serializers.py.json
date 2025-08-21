@@ -1,0 +1,38 @@
+{
+    "sourceFile": "gbv_project/accounts/serializers.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1752650502080,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752650518896,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,1 @@\n+from rest_framework import serializers\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752650524617,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,2 @@\n+from rest_framework import serializers\r\n+from accounts\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752650535449,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,2 @@\n+from rest_framework import serializers\r\n+from accounts.models import user\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752650545603,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,5 @@\n from rest_framework import serializers\r\n from accounts.models import User\r\n+\r\n+\r\n+class Login\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1752650551314,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n from rest_framework import serializers\r\n from accounts.models import User\r\n \r\n \r\n-class Logine\n\\ No newline at end of file\n+class Login\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1752650502080,
+            "name": "Commit-0",
+            "content": "from rest"
+        }
+    ]
+}

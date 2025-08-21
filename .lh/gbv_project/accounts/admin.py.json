@@ -1,0 +1,50 @@
+{
+    "sourceFile": "gbv_project/accounts/admin.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1753354284521,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1753354293282,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,3 @@\n from django.contrib import admin\r\n-from accounts.\r\n+from accounts.models impor Use\r\n # Register your models here.\r\n"
+                },
+                {
+                    "date": 1753354299958,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,3 @@\n from django.contrib import admin\r\n-from accounts.models impor Use\r\n+from accounts.models import User\r\n # Register your models here.\r\n"
+                },
+                {
+                    "date": 1753354313240,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,6 @@\n from django.contrib import admin\r\n from accounts.models import User\r\n+\r\n+admin .site \r\n+\r\n # Register your models here.\r\n"
+                },
+                {
+                    "date": 1753354318778,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,5 @@\n from django.contrib import admin\r\n from accounts.models import User\r\n \r\n-admin .site \r\n-\r\n+admi\r\n # Register your models here.\r\n"
+                },
+                {
+                    "date": 1753354324911,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n from django.contrib import admin\r\n from accounts.models import User\r\n \r\n-admi\r\n+admin.s\r\n # Register your models here.\r\n"
+                },
+                {
+                    "date": 1753354330697,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,5 @@\n+from django.contrib import admin\r\n+from accounts.models import User\r\n+\r\n+admin.site.register\r\n+# Register your models here.\r\n"
+                },
+                {
+                    "date": 1753354335839,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,5 @@\n+from django.contrib import admin\r\n+from accounts.models import User\r\n+\r\n+admin.site.register(User)\r\n+# Register your models here.\r\n"
+                },
+                {
+                    "date": 1753354341442,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,14 +2,4 @@\n from accounts.models import User\r\n \r\n admin.site.register(User)\r\n # Register your models here.\r\n-from django.contrib import admin\r\n-from accounts.models import User\r\n-\r\n-admin.site.register\r\n-# Register your models here.\r\n-from django.contrib import admin\r\n-from accounts.models import User\r\n-\r\n-admin.s\r\n-# Register your models here.\r\n"
+                }
+            ],
+            "date": 1753354284521,
+            "name": "Commit-0",
+            "content": "from django.contrib import admin\r\nfrom accounts.\r\n# Register your models here.\r\n"
+        }
+    ]
+}
