@@ -86,5 +86,76 @@ class GBVReport(models.Model):
         verbose_name = "GBV Report"
         verbose_name_plural = "GBV Reports"
         
-class Appointments(models.Model):
-    pass
+class CaseAssignment(models.Model):
+    """Track which professionals are assigned to which cases"""
+    report = models.ForeignKey(GBVReport, on_delete=models.CASCADE, related_name="assigned_reports")
+    professional = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    assigned_date = models.DateTimeField(auto_now_add=True)
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        null=True,
+        related_name='assignments_made'
+    )
+    is_active = models.BooleanField(default=True)
+    notes = models.TextField(blank=True)
+
+class Appointment(models.Model):
+    APPOINTMENT_TYPES = [
+        ('medical', 'Medical Consultation'),
+        ('legal', 'Legal Consultation'),
+        ('counseling', 'Counseling Session'),
+        ('follow_up', 'Follow-up Meeting'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('scheduled', 'Scheduled'),
+        ('confirmed', 'Confirmed'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+        ('no_show', 'No Show'),
+    ]
+    
+    report = models.ForeignKey(GBVReport, on_delete=models.CASCADE, related_name='appointments')
+    professional = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    appointment_type = models.CharField(max_length=20, choices=APPOINTMENT_TYPES)
+    scheduled_date = models.DateTimeField()
+    duration_minutes = models.PositiveIntegerField(default=60)
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='scheduled')
+    notes = models.TextField(blank=True)
+    location = models.CharField(max_length=255, blank=True)
+    is_virtual = models.BooleanField(default=False)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class CaseNote(models.Model):
+    """Track case progress and communications"""
+    report = models.ForeignKey(GBVReport, on_delete=models.CASCADE, related_name='case_notes')
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    note_type = models.CharField(max_length=20, choices=[
+        ('general', 'General Update'),
+        ('medical', 'Medical Note'),
+        ('legal', 'Legal Note'),
+        ('counseling', 'Counseling Note'),
+        ('safety', 'Safety Assessment'),
+    ])
+    content = models.TextField()
+    is_confidential = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Document(models.Model):
+    """Store case-related documents"""
+    report = models.ForeignKey(GBVReport, on_delete=models.CASCADE, related_name='documents')
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    document_type = models.CharField(max_length=50, choices=[
+        ('medical_report', 'Medical Report'),
+        ('legal_document', 'Legal Document'),
+        ('evidence', 'Evidence'),
+        ('photo', 'Photograph'),
+        ('other', 'Other'),
+    ])
+    file = models.FileField(upload_to='case_documents/')
+    description = models.CharField(max_length=255, blank=True)
+    is_confidential = models.BooleanField(default=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
