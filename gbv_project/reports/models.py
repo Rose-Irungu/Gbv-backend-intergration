@@ -1,7 +1,13 @@
 from django.db import models
 from datetime import datetime
+from django.conf import settings
 import string
 import random
+
+class ReportManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
 
 class GBVReport(models.Model):
     INCIDENT_TYPE_CHOICES = [
@@ -12,12 +18,18 @@ class GBVReport(models.Model):
         ('other', 'Other'),
     ]
     
+    REPORT_STATUSES = (
+        ('pending', 'Pending'),
+        ('under_review', 'Under Review'),
+        ('resolved', 'Resolved')
+    )
+    
     # Personal Information (Required)
     name = models.CharField(max_length=255, help_text="Full name of the reporter")
     email = models.EmailField(help_text="Email address for contact")
     phone = models.CharField(max_length=20, help_text="Phone number for contact")
-    
-    # Incident Information
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    status = models.CharField(max_length=15, choices=REPORT_STATUSES, default="pending")
     incident_date = models.DateTimeField(default=datetime.now())
     incident_location = models.CharField(max_length=255, help_text="Location where the incident occurred") 
     incident_type = models.CharField(
@@ -27,7 +39,7 @@ class GBVReport(models.Model):
         help_text="Type of incident reported"
     )
     description = models.TextField(help_text="Detailed description of the incident")
-    
+    is_deleted = models.BooleanField(default=False)
     # Safety Assessment
     immediate_danger = models.BooleanField(
         default=False, 
@@ -37,7 +49,7 @@ class GBVReport(models.Model):
         default=False, 
         help_text="Indicates if the reporter needs medical attention"
     )
-    
+    objects = ReportManager()
     # System Fields
     reference_code = models.CharField(
         max_length=50, 
@@ -53,6 +65,10 @@ class GBVReport(models.Model):
         if not self.reference_code:
             self.reference_code = self.generate_reference_code()
         super().save(*args, **kwargs)
+        
+    def delete(self):
+        self.is_deleted=True
+        self.save()
     
     def generate_reference_code(self):
         """Generate a unique reference code"""

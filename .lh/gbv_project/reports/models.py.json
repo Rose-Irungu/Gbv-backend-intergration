@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 26,
+            "activePatchIndex": 27,
             "patches": [
                 {
                     "date": 1752570601594,
@@ -112,6 +112,10 @@
                 {
                     "date": 1753339571101,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n     INCIDENT_TYPE_CHOICES = [\r\n         ('physical', 'Physical Violence'),\r\n         ('sexual', 'Sexual Violence'),\r\n         ('emotional', 'Emotional/Psychological'),\r\n-        ('online', 'Online '),\r\n+        ('online', 'Online Bu'),\r\n         ('other', 'Other'),\r\n     ]\r\n     \r\n     # Personal Information (Required)\r\n"
+                },
+                {
+                    "date": 1755844904878,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     # Personal Information (Required)\r\n     name = models.CharField(max_length=255, help_text=\"Full name of the reporter\")\r\n     email = models.EmailField(help_text=\"Email address for contact\")\r\n     phone = models.CharField(max_length=20, help_text=\"Phone number for contact\")\r\n-    reporter = models.ForeignKey(settings.)\r\n+    reporter = models.ForeignKey(settings.\\)\r\n     incident_date = models.DateTimeField(default=datetime.now())\r\n     incident_location = models.CharField(max_length=255, help_text=\"Location where the incident occurred\") \r\n     incident_type = models.CharField(\r\n         max_length=20, \r\n"
                 }
             ],
             "date": 1752570601594,
