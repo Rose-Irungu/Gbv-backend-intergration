@@ -13,26 +13,20 @@ class GBVReportSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        # Create GBV Report
-        report = GBVReport.objects.create(**validated_data)
-
-        # Check if user already exists
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
         email = validated_data.get('email')
-        if not User.objects.filter(email=email).exists():
-            # Generate random password
-            password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                "password": password,
+                "role": "survivor",
+                "phone_number": validated_data.get("phone", ""),
+                "first_name": validated_data.get("first_name", ""),
+                "last_name": validated_data.get("last_name", "")
+            }
+        )
 
-            # Create user
-            user = User.objects.create_user(
-                # username=email,
-                email=email,
-                password=password,
-                role='survivor',
-                phone_number=validated_data.get('phone', ''),
-                first_name=validated_data.get('name', '')
-            )
-
-            # Send credentials via email
+        if created:
             send_mail(
                 subject="Your Account Has Been Created",
                 message=f"""
@@ -54,4 +48,6 @@ Support Team
                 fail_silently=False
             )
 
+        report = GBVReport.objects.create(reporter=user, **validated_data)
         return report
+

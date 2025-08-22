@@ -29,6 +29,7 @@ class GBVReport(models.Model):
     email = models.EmailField(help_text="Email address for contact")
     phone = models.CharField(max_length=20, help_text="Phone number for contact")
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     status = models.CharField(max_length=15, choices=REPORT_STATUSES, default="pending")
     incident_date = models.DateTimeField(default=datetime.now())
     incident_location = models.CharField(max_length=255, help_text="Location where the incident occurred") 
@@ -84,3 +85,6 @@ class GBVReport(models.Model):
         ordering = ['-date_reported']
         verbose_name = "GBV Report"
         verbose_name_plural = "GBV Reports"
+        
+class Appointments(models.Model):
+    pass

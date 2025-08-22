@@ -23,10 +23,10 @@ class GBVReportAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Personal Information', {
-            'fields': ('name', 'email', 'phone')
+            'fields': ('name', 'email', 'phone', 'reporter')
         }),
         ('Incident Details', {
-            'fields': ('incident_date', 'incident_location', 'incident_type', 'description')
+            'fields': ('incident_date', 'incident_location', 'incident_type', 'description', 'status')
         }),
         ('Safety Assessment', {
             'fields': ('immediate_danger', 'needs_medical_attention')
