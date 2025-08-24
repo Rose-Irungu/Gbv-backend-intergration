@@ -8,6 +8,9 @@ import random
 User = get_user_model()
 
 class GBVReportSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='reporter.get_full_name', read_only=True)
+    email = serializers.EmailField(source='reporter.email', read_only=True)
+    phone = serializers.CharField(source='reporter.phone_number', read_only=True)
     class Meta:
         model = GBVReport
         fields = '__all__'

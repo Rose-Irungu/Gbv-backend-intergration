@@ -5,7 +5,6 @@ from .models import GBVReport, Appointment, CaseAssignment, CaseNote, Document
 class GBVReportAdmin(admin.ModelAdmin):
     list_display = [
         'reference_code', 
-        'name', 
         'incident_type', 
         'incident_location', 
         'immediate_danger',
@@ -18,12 +17,12 @@ class GBVReportAdmin(admin.ModelAdmin):
         'needs_medical_attention',
         'date_reported'
     ]
-    search_fields = ['reference_code', 'name', 'email', 'incident_location']
+    search_fields = ['reference_code','incident_location']
     readonly_fields = ['reference_code', 'date_reported']
     
     fieldsets = (
         ('Personal Information', {
-            'fields': ('name', 'email', 'phone', 'reporter')
+            'fields': ('reporter',)
         }),
         ('Incident Details', {
             'fields': ('incident_date', 'incident_location', 'incident_type', 'description', 'status')

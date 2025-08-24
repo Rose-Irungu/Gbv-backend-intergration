@@ -25,9 +25,9 @@ class GBVReport(models.Model):
     )
     
     # Personal Information (Required)
-    name = models.CharField(max_length=255, help_text="Full name of the reporter")
-    email = models.EmailField(help_text="Email address for contact")
-    phone = models.CharField(max_length=20, help_text="Phone number for contact")
+    # name = models.CharField(max_length=255, help_text="Full name of the reporter")
+    # email = models.EmailField(help_text="Email address for contact")
+    # phone = models.CharField(max_length=20, help_text="Phone number for contact")
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="survivor")
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="lawyer")
     status = models.CharField(max_length=15, choices=REPORT_STATUSES, default="pending")
