@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
+from reports.models import Appointment
 
 
 class LoginSerializer(serializers.Serializer):
@@ -22,6 +23,7 @@ class LoginSerializer(serializers.Serializer):
                 "id": user.id,
                 "email": user.email,
                 "username": user.username,
+                "full_name" : user.get_full_name(),
                 "user_type": user.role,
             }
         }
@@ -42,11 +44,51 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         model = User
         fields = ['first_name', 'last_name', 'phone_number']
         
+
 class UserSignupSerializer(serializers.ModelSerializer):
+    appointments_count = serializers.SerializerMethodField()
+    reports_count = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['email', 'password', 'role', 'first_name', 'last_name']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+            "role",
+            "is_active",
+            "last_login",
+            "date_joined", 
+            "appointments_count",
+            "reports_count",
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True}
+        }
+
+    def get_appointments_count(self, obj):
+        if obj.role == 'survivor':
+            count = Appointment.objects.filter(report__reporter=obj).count()
+            if count:
+                return count
+            else:
+                return 0
+        else:
+            return getattr(obj, "appointments_pro", []).count() if hasattr(obj, "appointments_pro") else 0
+
+    def get_reports_count(self, obj):
+        if obj.role == 'survivor':
+            return getattr(obj, "survivor", []).count() if hasattr(obj, "survivor") else 0
+        else:
+            return getattr(obj, "lawyer", []).count() if hasattr(obj, "lawyer") else 0
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["created_at"] = data.pop("date_joined", None)
+        return data
+
 
     def create(self, validated_data):
         user = User.objects.create_user(

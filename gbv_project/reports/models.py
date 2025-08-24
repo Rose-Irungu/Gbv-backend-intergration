@@ -117,7 +117,7 @@ class Appointment(models.Model):
     ]
     
     report = models.ForeignKey(GBVReport, on_delete=models.CASCADE, related_name='appointments')
-    professional = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    professional = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='appointments_pro')
     appointment_type = models.CharField(max_length=20, choices=APPOINTMENT_TYPES)
     scheduled_date = models.DateTimeField()
     duration_minutes = models.PositiveIntegerField(default=60)

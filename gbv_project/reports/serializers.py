@@ -11,22 +11,36 @@ class GBVReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = GBVReport
         fields = '__all__'
+        # Make reporter field not required since we'll set it programmatically
+        extra_kwargs = {
+            'reporter': {'required': False}
+        }
 
     def create(self, validated_data):
+        # Extract user-related fields from validated_data before creating the report
+        email = validated_data.pop('email', '')
+        first_name = validated_data.pop('first_name', '')
+        last_name = validated_data.pop('last_name', '')
+        phone = validated_data.pop('phone', '')
+        
+        # Generate password
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        email = validated_data.get('email')
+        
+        # Create or get user
         user, created = User.objects.get_or_create(
             email=email,
             defaults={
-                "password": password,
+                # "password": password,
                 "role": "survivor",
-                "phone_number": validated_data.get("phone", ""),
-                "first_name": validated_data.get("first_name", ""),
-                "last_name": validated_data.get("last_name", "")
+                "phone_number": phone,
+                "first_name": first_name,
+                "last_name": last_name
             }
         )
 
         if created:
+            user.set_password(password)
+            user.save()
             send_mail(
                 subject="Your Account Has Been Created",
                 message=f"""
@@ -48,6 +62,8 @@ Support Team
                 fail_silently=False
             )
 
+        # Now create the report with the user as reporter
+        # validated_data no longer contains email, first_name, last_name, phone
         report = GBVReport.objects.create(reporter=user, **validated_data)
         return report
 

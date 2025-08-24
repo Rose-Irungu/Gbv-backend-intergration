@@ -1,7 +1,7 @@
 # views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
@@ -32,7 +32,11 @@ class AuthView(APIView):
       if action == "login":
           serializer = LoginSerializer(data=request.data)
           serializer.is_valid(raise_exception=True)
-          return Response(serializer.validated_data)
+          return Response({
+                "result_code": 0,
+                "message": "Login successful",
+                "data": serializer.validated_data
+          })
 
       elif action == "reset_password":
           serializer = ResetPasswordRequestSerializer(data=request.data)
@@ -83,15 +87,27 @@ class AuthView(APIView):
 class UserSignupView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSignupSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAdminUser]
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         role = response.data['role']
         return Response({
+            'result_code': 0,
             'message': 'User created successfully',
             'role': role
         }, status=status.HTTP_201_CREATED)
 
+class Users(APIView):
+    permission_classes = [IsAdminUser]
+    
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSignupSerializer(users, many=True)
+        return Response({
+            "result_code": 0,
+            "message" : "User retrieved successfully",
+            "data" : serializer.data
+        })
   
   

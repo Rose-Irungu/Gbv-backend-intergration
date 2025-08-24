@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GBVReport
+from .models import GBVReport, Appointment, CaseAssignment, CaseNote, Document
 
 @admin.register(GBVReport)
 class GBVReportAdmin(admin.ModelAdmin):
@@ -36,3 +36,8 @@ class GBVReportAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         })
     )
+
+admin.site.register(Appointment)
+admin.site.register(CaseAssignment)
+admin.site.register(CaseNote)
+admin.site.register(Document)
