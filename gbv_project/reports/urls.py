@@ -15,6 +15,6 @@ router.register('documents', DocumentViewSet, basename='document')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('/dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('cases/<str:report_id>/summary/', case_summary, name='case-summary'),
 ]
