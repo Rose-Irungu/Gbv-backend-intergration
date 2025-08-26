@@ -343,3 +343,12 @@ class DashBoardView(APIView):
             }
 
         return Response(dashboard_data)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_proffesionals(request):
+    professionals = User.objects.filter(
+        role__in=['doctor', 'lawyer', 'counselor']
+    ).values('id', 'first_name', 'last_name', 'email', 'role')
+    
+    return Response(professionals)

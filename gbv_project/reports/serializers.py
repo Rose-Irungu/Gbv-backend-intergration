@@ -12,6 +12,8 @@ class GBVReportSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source='reporter.get_full_name', read_only=True)
     email = serializers.EmailField(source='reporter.email', read_only=True)
     phone = serializers.CharField(source='reporter.phone_number', read_only=True)
+    assigned_by_name = serializers.CharField(source='assigned_by.get_full_name', read_only=True)
+    assigned_to_name = serializers.CharField(source='assigned_to.get_full_name', read_only=True)
 
     # Write-only (for incoming requests)
     reporter_email = serializers.EmailField(write_only=True)
