@@ -79,7 +79,7 @@ class GBVReport(models.Model):
                 return code
     
     def __str__(self):
-        return f"Report {self.reference_code} - {self.name} - {self.incident_location}"
+        return f"Report {self.reference_code} - {self.reporter.get_full_name()} - {self.incident_location}"
     
     class Meta:
         ordering = ['-date_reported']

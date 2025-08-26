@@ -29,11 +29,23 @@ class ReportApiView(ModelViewSet):
         """
         if self.action in ["update", "partial_update"]:
             return [IsAdminOrLawEnforcement()]
-        elif self.action in ["destroy", "list"]:
-            return [IsAdminUser()]
-        elif self.action in ["get_reporter", "retrieve"]:
+        elif self.action in ["destroy", "list", "get_reporter", "retrieve"]:
             return [IsAuthenticated()]
         return super().get_permissions()
+    
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'admin':
+            return GBVReport.objects.all()
+        elif user.role in ['doctor', 'lawyer', 'counselor']:
+            assigned_reports = CaseAssignment.objects.filter(
+                professional=user, is_active=True
+            ).values_list('report', flat=True)
+            return GBVReport.objects.filter(
+                Q(pk__in=assigned_reports) | Q(appointments__professional=user)
+            ).distinct()
+        else:
+            return GBVReport.objects.filter(reporter=user)
     
     @action(detail=False, methods=['get'], url_path='get_reports')
     def get_reporter(self, request):

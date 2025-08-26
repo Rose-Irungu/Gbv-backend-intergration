@@ -63,6 +63,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "date_joined", 
             "appointments_count",
             "reports_count",
+            "password"
         ]
         extra_kwargs = {
             "password": {"write_only": True}
@@ -94,8 +95,11 @@ class UserSignupSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             **validated_data
         )
+        print(validated_data)
+        password = validated_data['password']
+        user.set_password(password)
         if validated_data['role'] == 'admin':
             user.is_superuser = True
             user.is_staff = True
-            user.save()
+        user.save()
         return user      
