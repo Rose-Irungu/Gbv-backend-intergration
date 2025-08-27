@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 5,
+            "activePatchIndex": 9,
             "patches": [
                 {
                     "date": 1752497253244,
@@ -28,6 +28,22 @@
                 {
                     "date": 1752582587103,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,18 +1,38 @@\n from django.contrib import admin\r\n+from .models import GBVReport\r\n \r\n-# Register your models here.\r\n-from django.db import models\r\n-\r\n-class AnonymousReport(models.Model):\r\n-    description = models.TextField()\r\n-    location = models.CharField(max_length=255)\r\n-    date_reported = models.DateTimeField(auto_now_add=True)\r\n-\r\n-    def __str__(self):\r\n-        return f\"Anonymous Report from {self.location}\"\r\n-class ReportDocument(models.Model):\r\n-    report = models.ForeignKey(AnonymousReport, on_delete=models.CASCADE)\r\n-    file = models.FileField(upload_to='report_documents/')\r\n-from django.contrib import admin\r\n-\r\n-# Register your models here.\r\n+@admin.register(GBVReport)\r\n+class GBVReportAdmin(admin.ModelAdmin):\r\n+    list_display = [\r\n+        'reference_code', \r\n+        'name', \r\n+        'incident_type', \r\n+        'incident_location', \r\n+        'immediate_danger',\r\n+        'needs_medical_attention',\r\n+        'date_reported'\r\n+    ]\r\n+    list_filter = [\r\n+        'incident_type', \r\n+        'immediate_danger', \r\n+        'needs_medical_attention',\r\n+        'date_reported'\r\n+    ]\r\n+    search_fields = ['reference_code', 'name', 'email', 'incident_location']\r\n+    readonly_fields = ['reference_code', 'date_reported']\r\n+    \r\n+    fieldsets = (\r\n+        ('Personal Information', {\r\n+            'fields': ('name', 'email', 'phone')\r\n+        }),\r\n+        ('Incident Details', {\r\n+            'fields': ('incident_date', 'incident_location', 'incident_type', 'description')\r\n+        }),\r\n+        ('Safety Assessment', {\r\n+            'fields': ('immediate_danger', 'needs_medical_attention')\r\n+        }),\r\n+        ('System Information', {\r\n+            'fields': ('reference_code', 'date_reported'),\r\n+            'classes': ('collapse',)\r\n+        })\r\n+    )\r\n"
+                },
+                {
+                    "date": 1755846346936,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n     readonly_fields = ['reference_code', 'date_reported']\r\n     \r\n     fieldsets = (\r\n         ('Personal Information', {\r\n-            'fields': ('name', 'email', 'phone')\r\n+            'fields': ('name', 'email', 'phone', )\r\n         }),\r\n         ('Incident Details', {\r\n             'fields': ('incident_date', 'incident_location', 'incident_type', 'description')\r\n         }),\r\n"
+                },
+                {
+                    "date": 1755846354829,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n     readonly_fields = ['reference_code', 'date_reported']\r\n     \r\n     fieldsets = (\r\n         ('Personal Information', {\r\n-            'fields': ('name', 'email', 'phone', )\r\n+            'fields': ('name', 'email', 'phone', 'reporter')\r\n         }),\r\n         ('Incident Details', {\r\n             'fields': ('incident_date', 'incident_location', 'incident_type', 'description')\r\n         }),\r\n"
+                },
+                {
+                    "date": 1755846362419,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n         ('Personal Information', {\r\n             'fields': ('name', 'email', 'phone', 'reporter')\r\n         }),\r\n         ('Incident Details', {\r\n-            'fields': ('incident_date', 'incident_location', 'incident_type', 'description')\r\n+            'fields': ('incident_date', 'incident_location', 'incident_type', 'description', '')\r\n         }),\r\n         ('Safety Assessment', {\r\n             'fields': ('immediate_danger', 'needs_medical_attention')\r\n         }),\r\n"
+                },
+                {
+                    "date": 1755846369595,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n         ('Personal Information', {\r\n             'fields': ('name', 'email', 'phone', 'reporter')\r\n         }),\r\n         ('Incident Details', {\r\n-            'fields': ('incident_date', 'incident_location', 'incident_type', 'description', '')\r\n+            'fields': ('incident_date', 'incident_location', 'incident_type', 'description', 'status')\r\n         }),\r\n         ('Safety Assessment', {\r\n             'fields': ('immediate_danger', 'needs_medical_attention')\r\n         }),\r\n"
                 }
             ],
             "date": 1752497253244,
