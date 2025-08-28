@@ -206,8 +206,12 @@ class CaseAssignmentViewSet(ModelViewSet):
                 report=report, professional=professional, is_active=True
             ).exists():
                 raise serializers.ValidationError("Professional already assigned to this case")
+            print("-----------------------------------------------------------")
             
             serializer.save(assigned_by=self.request.user)
+            report.status = 'under_review'
+            report.assigned_to = professional
+            report.save()
             
         except GBVReport.DoesNotExist:
             raise serializers.ValidationError("Report not found")
@@ -237,6 +241,10 @@ class CaseAssignmentViewSet(ModelViewSet):
             if not created and not assignment.is_active:
                 assignment.is_active = True
                 assignment.save()
+                
+            report.status = 'under_review'
+            report.assigned_to = professional
+            report.save()
             
             return Response(self.get_serializer(assignment).data)
             
