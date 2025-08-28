@@ -39,7 +39,7 @@ class ReportApiView(ModelViewSet):
             return GBVReport.objects.all()
         elif user.role in ['doctor', 'lawyer', 'counselor']:
             assigned_reports = CaseAssignment.objects.filter(
-                professional=user, is_active=True
+                professional=user
             ).values_list('report', flat=True)
             return GBVReport.objects.filter(
                 Q(pk__in=assigned_reports) | Q(appointments__professional=user)
@@ -69,7 +69,7 @@ class BaseGBVViewSet(ModelViewSet):
             return GBVReport.objects.all()
         elif user.role in ['doctor', 'lawyer', 'counselor']:
             assigned_reports = CaseAssignment.objects.filter(
-                professional=user, is_active=True
+                professional=user
             ).values_list('report', flat=True)
             return GBVReport.objects.filter(
                 Q(pk__in=assigned_reports) | Q(appointments__professional=user)
@@ -85,7 +85,7 @@ class BaseGBVViewSet(ModelViewSet):
                 return report
             elif user.role in ['doctor', 'lawyer', 'counselor']:
                 assigned_to_case = CaseAssignment.objects.filter(
-                    report=report, professional=user, is_active=True
+                    report=report, professional=user
                 ).exists()
                 has_appointment = report.appointments.filter(professional=user).exists()
                 
@@ -109,7 +109,7 @@ class AppointmentViewSet(BaseGBVViewSet):
             return Appointment.objects.all()
         elif user.role in ['doctor', 'lawyer', 'counselor']:
             assigned_reports = CaseAssignment.objects.filter(
-                professional=user, is_active=True
+                professional=user
             ).values_list('report', flat=True)
             return Appointment.objects.filter(
                 Q(professional=user) | Q(report__in=assigned_reports)
@@ -327,7 +327,7 @@ class DashBoardView(APIView):
             urgent_cases = reports.filter(Q(status="pending") & Q(
                 Q(immediate_danger=True) | Q(needs_medical_attention=True)
             )).order_by('-date_reported')[:5]
-            assigned_reports = CaseAssignment.objects.filter(is_active=True).count()
+            assigned_reports = CaseAssignment.objects.filter().count()
 
             dashboard_data = {
                 "total_reports": total_reports,

@@ -7,7 +7,11 @@ import random
 class ReportManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)
-        return super().get_queryset().filter(is_active=True)
+        
+        
+class CaseAssignmentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True, report__is_deleted=False)
     
 
 class GBVReport(models.Model):
@@ -100,6 +104,8 @@ class CaseAssignment(models.Model):
     )
     is_active = models.BooleanField(default=True)
     notes = models.TextField(blank=True)
+    
+    objects = CaseAssignmentManager()
 
 class Appointment(models.Model):
     APPOINTMENT_TYPES = [

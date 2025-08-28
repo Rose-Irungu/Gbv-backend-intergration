@@ -1,6 +1,5 @@
-# auth_serializers.py
 from rest_framework import serializers
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
@@ -71,13 +70,14 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
     def get_appointments_count(self, obj):
         if obj.role == 'survivor':
-            count = Appointment.objects.filter(report__reporter=obj).count()
+            count = Appointment.objects.filter(report__reporter=obj, report__is_deleted=False).count()
             if count:
                 return count
             else:
                 return 0
         else:
-            return getattr(obj, "appointments_pro", []).count() if hasattr(obj, "appointments_pro") else 0
+            count = Appointment.objects.filter(professional=obj, report__is_deleted=False).count()
+            return count
 
     def get_reports_count(self, obj):
         if obj.role == 'survivor':
