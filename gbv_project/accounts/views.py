@@ -22,9 +22,10 @@ User = get_user_model()
 
 class AuthView(APIView):
   def get_permissions(self):
-        if self.request.method == "POST" and self.request.query_params.get("action") == "login":
-            return [AllowAny()]
-        return [IsAuthenticated()]
+    print(self.request.query_params)
+    if self.request.method == "POST" and self.request.query_params.get("action") == "login":
+        return [AllowAny()]
+    return [IsAuthenticated()]
       
   def post(self, request, *args, **kwargs):
       action = request.query_params.get("action")
