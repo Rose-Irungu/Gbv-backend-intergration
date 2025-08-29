@@ -9,12 +9,6 @@ class ReportManager(models.Manager):
         return super().get_queryset().filter(is_deleted=False)
 
 
-
-class ReportManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(is_active=True)
-    
-
 class GBVReport(models.Model):
     INCIDENT_TYPE_CHOICES = [
         ('physical', 'Physical Violence'),
