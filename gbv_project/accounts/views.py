@@ -140,5 +140,21 @@ class Users(APIView):
             "message" : "User retrieved successfully",
             "data" : serializer.data
         })
-  
-  
+    
+    def put(self, request):
+        user_id = request.query_params.get("user_id")
+        if not user_id:
+            return Response({"detail": "User ID required."}, status=400)
+        
+        try:
+            user = User.objects.get(id=user_id)
+            serializer = UserSignupSerializer(user, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({
+                "result_code": 0,
+                "message": "User updated successfully",
+                "data": serializer.data
+            })
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=404)
