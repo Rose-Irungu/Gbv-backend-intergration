@@ -1,5 +1,6 @@
 from reports.serializers import GBVReportSerializer
 from rest_framework.response import Response
+from reports.send_mails import GBVEmailService
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
@@ -60,6 +61,21 @@ class ReportApiView(ModelViewSet):
             reports = self.get_queryset().none()
         serializer = self.get_serializer(reports, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def perform_update(self, serializer):
+        """Override to send status update notifications"""
+        old_status = self.get_object().status
+        instance = serializer.save()
+        
+        # Send notification if status changed
+        if old_status != instance.status:
+            GBVEmailService.send_status_update_notification(
+                report=instance,
+                old_status=old_status,
+                updated_by=self.request.user
+            )
+        
+        return instance
 
 class BaseGBVViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -120,17 +136,29 @@ class AppointmentViewSet(BaseGBVViewSet):
     def perform_create(self, serializer):
         report_id = self.request.data.get('report')
         report = self.validate_report_access(report_id, self.request.user)
-        serializer.save()
+        appointment = serializer.save()
+        
+        # Send appointment scheduled notification
+        GBVEmailService.send_appointment_scheduled_notification(appointment)
     
     @action(detail=True, methods=['patch'])
     def update_status(self, request, pk=None):
         appointment = self.get_object()
         
         if request.user.role == 'admin' or appointment.professional == request.user:
+            old_status = appointment.status
             new_status = request.data.get('status')
+            
             if new_status in dict(Appointment.STATUS_CHOICES):
                 appointment.status = new_status
                 appointment.save()
+                
+                # Send notification if status changed
+                if old_status != new_status:
+                    GBVEmailService.send_appointment_status_update_notification(
+                        appointment, old_status
+                    )
+                
                 return Response(self.get_serializer(appointment).data)
             return Response({'error': 'Invalid status'}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -162,9 +190,13 @@ class CaseNoteViewSet(BaseGBVViewSet):
         report = self.validate_report_access(report_id, self.request.user)
         
         if self.request.user.role == 'survivor':
-            serializer.save(created_by=self.request.user, note_type='general')
+            case_note = serializer.save(created_by=self.request.user, note_type='general')
         else:
-            serializer.save(created_by=self.request.user)
+            case_note = serializer.save(created_by=self.request.user)
+        
+        # Send notification for non-confidential notes
+        if not case_note.is_confidential:
+            GBVEmailService.send_case_note_added_notification(case_note)
 
 class DocumentViewSet(BaseGBVViewSet):
     serializer_class = DocumentSerializer
@@ -206,12 +238,21 @@ class CaseAssignmentViewSet(ModelViewSet):
                 report=report, professional=professional, is_active=True
             ).exists():
                 raise serializers.ValidationError("Professional already assigned to this case")
-            print("-----------------------------------------------------------")
             
-            serializer.save(assigned_by=self.request.user)
+            # Save the assignment
+            assignment = serializer.save(assigned_by=self.request.user)
+            
+            # Update report status
             report.status = 'under_review'
             report.assigned_to = professional
             report.save()
+            
+            # Send email notification
+            GBVEmailService.send_report_assigned_notification(
+                report=report,
+                professional=professional,
+                assigned_by=self.request.user
+            )
             
         except GBVReport.DoesNotExist:
             raise serializers.ValidationError("Report not found")
@@ -230,7 +271,7 @@ class CaseAssignmentViewSet(ModelViewSet):
             
             if professional.role not in ['doctor', 'lawyer', 'counselor']:
                 return Response({'error': 'Can only assign professionals'}, 
-                              status=status.HTTP_400_BAD_REQUEST)
+                                status=status.HTTP_400_BAD_REQUEST)
             
             assignment, created = CaseAssignment.objects.get_or_create(
                 report=report,
@@ -246,14 +287,21 @@ class CaseAssignmentViewSet(ModelViewSet):
             report.assigned_to = professional
             report.save()
             
+            # Send email notification for quick assign as well
+            GBVEmailService.send_report_assigned_notification(
+                report=report,
+                professional=professional,
+                assigned_by=request.user
+            )
+            
             return Response(self.get_serializer(assignment).data)
             
         except GBVReport.DoesNotExist:
             return Response({'error': 'Report not found'}, 
-                          status=status.HTTP_404_NOT_FOUND)
+                            status=status.HTTP_404_NOT_FOUND)
         except User.DoesNotExist:
             return Response({'error': 'Professional not found'}, 
-                          status=status.HTTP_404_NOT_FOUND)
+                            status=status.HTTP_404_NOT_FOUND)
     
     @action(detail=False, methods=['delete'], url_path='unassign/(?P<report_id>[^/.]+)/(?P<professional_id>[^/.]+)')
     def quick_unassign(self, request, report_id=None, professional_id=None):
@@ -270,7 +318,7 @@ class CaseAssignmentViewSet(ModelViewSet):
             
         except CaseAssignment.DoesNotExist:
             return Response({'error': 'Assignment not found'}, 
-                          status=status.HTTP_404_NOT_FOUND)
+                        status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

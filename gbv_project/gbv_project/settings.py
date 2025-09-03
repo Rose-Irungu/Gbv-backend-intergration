@@ -156,6 +156,7 @@ SPECTACULAR_SETTINGS = {
     ],
 }
 
+FRONTEND_URL = 'http://localhost:5173/'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -180,12 +181,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
+TIME_ZONE = 'Africa/Nairobi'
 USE_TZ = True
+USE_I18N = True
 
 
 # Static files (CSS, JavaScript, Images)
