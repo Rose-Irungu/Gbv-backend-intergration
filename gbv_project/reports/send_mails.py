@@ -63,10 +63,10 @@ class GBVEmailService:
             'report': appointment.report,
             'notification_title': 'Appointment Scheduled',
             'action_title': 'Appointment Scheduled for Your Case',
-            'action_message': f'An appointment has been scheduled for {appointment.appointment_date.strftime("%B %d, %Y at %I:%M %p")}.',
+            'action_message': f'An appointment has been scheduled for {appointment.scheduled_date.strftime("%B %d, %Y at %I:%M %p")}.',
             'action_button_url': f'{settings.FRONTEND_URL}/appointments/{appointment.id}',
             'action_button_text': 'View Appointment Details',
-            'appointment_date': appointment.appointment_date,
+            'appointment_date': appointment.scheduled_date,
             'additional_info': f'Professional: {appointment.professional.get_full_name()}\nLocation: {appointment.location}\nType: {appointment.get_appointment_type_display()}' + (f'\n\nNotes: {appointment.notes}' if appointment.notes else ''),
             'system_contact': getattr(settings, 'SUPPORT_EMAIL', 'support@example.com')
         }
