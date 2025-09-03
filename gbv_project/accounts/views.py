@@ -96,7 +96,23 @@ class AuthView(APIView):
             serializer.save()
             return Response({"detail": "Profile updated", "user": serializer.data})
 
-        return Response({"detail": "Invalid action"}, status=400)# accounts/views.py
+        return Response({"detail": "Invalid action"}, status=400)
+    
+    def delete(self, request, *args, **kwargs):
+        user = request.user
+        if user.role != "admin":
+            return Response({"detail": "Only admins can delete users."}, status=403)
+        
+        user_id = request.query_params.get("user_id")
+        if not user_id:
+            return Response({"detail": "User ID required."}, status=400)
+        
+        try:
+            user_to_delete = User.objects.get(id=user_id)
+            user_to_delete.delete()
+            return Response({"detail": "User deleted successfully."})
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=404)
 
 
 class UserSignupView(generics.CreateAPIView):

@@ -20,3 +20,7 @@ class User(AbstractUser):
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+    
+    def delete(self, *args, **kwargs):
+        self.is_active = False
+        self.save()
