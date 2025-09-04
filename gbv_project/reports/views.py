@@ -128,7 +128,7 @@ class AppointmentViewSet(BaseGBVViewSet):
                 professional=user
             ).values_list('report', flat=True)
             return Appointment.objects.filter(
-                Q(professional=user) | Q(report__in=assigned_reports)
+                Q(professional=user)
             )
         else:
             return Appointment.objects.filter(report__reporter=user)
