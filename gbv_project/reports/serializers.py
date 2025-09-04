@@ -65,6 +65,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = '__all__'
+        extra_kwargs = { 'professional': {'required': False} }
         read_only_fields = ['created_at', 'updated_at']
 
 class CaseNoteSerializer(serializers.ModelSerializer):

@@ -134,12 +134,17 @@ class AppointmentViewSet(BaseGBVViewSet):
             return Appointment.objects.filter(report__reporter=user)
     
     def perform_create(self, serializer):
+        user = self.request.user
         report_id = self.request.data.get('report')
-        report = self.validate_report_access(report_id, self.request.user)
-        appointment = serializer.save()
         
-        # Send appointment scheduled notification
-        GBVEmailService.send_appointment_scheduled_notification(appointment)
+        report = self.validate_report_access(report_id, user)
+        
+        if user.role in ['doctor', 'lawyer', 'counselor']:
+            serializer.save(professional=user, report=report)
+        else:
+            serializer.save(report=report)
+        
+        GBVEmailService.send_appointment_scheduled_notification(serializer.instance)
     
     @action(detail=True, methods=['patch'])
     def update_status(self, request, pk=None):
